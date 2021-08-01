@@ -2,3 +2,4 @@ node_modules
 App_INSTA
 logs
 mysql
+session.data.json
