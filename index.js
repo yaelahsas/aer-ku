@@ -3,6 +3,8 @@ const moment = require('moment')
 const request = require('request');
 const fetch = require('node-fetch');
 const MQTT = require("async-mqtt");
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 
 wa.create().then(client => start(client));
@@ -15,7 +17,7 @@ function start(client) {
 
         console.log("Starting");
         try {
-            await nootif.subscribe("aerlapak");
+            await nootif.subscribe("AER/lapak");
             nootif.on('message', (topic, message) => {
                     console.log(topic, message.toString())
                     client.sendText('6281222354752-1617851635@g.us', message.toString())
@@ -37,7 +39,7 @@ function start(client) {
         const { id, pushname } = sender
         const { name } = chat
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-        const commands = ['#topup', '#sticker', '#stiker', '#halo', '#help', '#Ldriver', '#Llapak', '#ceksaldo', '#Fdriver']
+        const commands = ['#cpns', '#topup', '#sticker', '#stiker', '#halo', '#help', '#Ldriver', '#Llapak', '#ceksaldo', '#Fdriver']
         const cmds = commands.map(x => x + '\\b').join('|')
         const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
         if (cmd) {
@@ -256,6 +258,48 @@ function start(client) {
 
 
 
+
+                    break
+                case '#cpns':
+                    if (args.length == 2) {
+                        var nomornya = args[1]
+                        var options = {
+                            'method': 'POST',
+                            'url': 'http://bkd.banyuwangikab.go.id/cpns2021/cpns/seleksi_administrasi',
+                            'headers': {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'Cookie': 'ci_session=a%3A5%3A%7Bs%3A10%3A%22session_id%22%3Bs%3A32%3A%2221839e0ccc3c183faafe03290aaf7476%22%3Bs%3A10%3A%22ip_address%22%3Bs%3A13%3A%22114.79.18.167%22%3Bs%3A10%3A%22user_agent%22%3Bs%3A21%3A%22PostmanRuntime%2F7.26.8%22%3Bs%3A13%3A%22last_activity%22%3Bi%3A1627954486%3Bs%3A9%3A%22user_data%22%3Bs%3A0%3A%22%22%3B%7D39677b9d68ab56cb7d45ade43985f690f65ede65'
+                            },
+                            form: {
+                                'no_registrasi': '3510091105990002'
+                            }
+                        };
+                        request(options, function(error, response) {
+                            if (error) throw new Error(error);
+                            let $ = cheerio.load(response.body);
+                            let v = $.html($('span')).split('<span style="font-weight: bold; ">')[1];
+                            // var y = $.html().split('<div class="modal-body">')[1];
+                            var x = v.replace(/<span\s*[\/]?>/gi, "\n\n");
+                            var z = x.split('</span><span style="font-weight: bold;">')
+                            var nama = x.split('</span>')
+                                // var z = x.split('  <span style="font-weight: bold;">')[1];
+                                // var f = y.replace(x, " ");
+                                // var q = f.replace(z, " ")
+                            var fixnama = nama[2].replace('<span style="font-weight: bold;">', " ")
+                            var instutisi = nama[4].replace('<span style="font-weight: bold;">', " ")
+                            var pilihan = nama[6].replace('<span style="font-weight: bold;">', " ")
+                            var status = nama[8].replace('<span style="font-weight: bold; text-decoration:underline; color: green">', " ").replace('                    ', "").replace('\n', "")
+                            var pesan = nama[9].replace('<span style="font-weight: bold;">', " ")
+                            var fix = pesan.replace('<span style="font-style: italic; font-size: 8pt; display:block;">', " ")
+                            var fix2 = fix.replace(' <a href="https://https://sscasn.bkn.go.id//">sscasn.bkn.go.id</a>', " ")
+
+                            client.sendText(from, `Nama = ${fixnama}\nTempat = ${instutisi}\nPilihan = ${pilihan}\nStatus = ${status}\nNOTE : ${fix2}*`)
+                        });
+
+
+                        break
+
+                    }
             }
         } else {
             if (!isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))
