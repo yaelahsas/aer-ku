@@ -6,9 +6,9 @@ const {
 
 
 
-// orderan_selesai("https://aerumah.com/api/bot-total_orderan_selesai").then((result) => {
-//     console.log(result)
-// })
+orderan_selesai("https://aerumah.com/api/bot-total_orderan_selesai_offline").then((result) => {
+    console.log(result)
+})
 orderan_dapat_driver("https://aerumah.com/api/bot-lihat_orderan_dapat_driver_offline").then((result) => {
     console.log(result)
 })
