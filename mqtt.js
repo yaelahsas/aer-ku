@@ -3,7 +3,7 @@ const MQTT = require("async-mqtt");
 run()
 
 async function run() {
-    const client = await MQTT.connectAsync("tcp://test.mosquitto.org:1883")
+    const client = await MQTT.connectAsync("tcp://broker.emqx.io:1883")
 
     console.log("Starting");
     try {

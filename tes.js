@@ -3,12 +3,14 @@ const {
     orderan_selesai,
     orderan_dapat_driver
 } = require('./lib/aerapi')
+    // const os = require('os');
 
 
+// console.log(os.cpus());
+// console.log(os.totalmem());
+// console.log(os.freemem())
+var os = require('os-utils');
 
-orderan_selesai("https://aerumah.com/api/bot-total_orderan_selesai_offline").then((result) => {
-    console.log(result)
-})
-orderan_dapat_driver("https://aerumah.com/api/bot-lihat_orderan_dapat_driver_offline").then((result) => {
-    console.log(result)
-})
+os.cpuUsage(function(v) {
+    console.log('CPU Usage (%): ' + v);
+});

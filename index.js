@@ -14,7 +14,7 @@ function start(client) {
     run()
 
     async function run() {
-        const nootif = await MQTT.connectAsync("tcp://test.mosquitto.org:1883")
+        const nootif = await MQTT.connectAsync("tcp://broker.emqx.io:1883")
 
         console.log("Starting");
         try {
