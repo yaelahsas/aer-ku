@@ -164,6 +164,8 @@ function start(client) {
                     \n🤖  *'#SOff'* Melihat Jumlah Selesai Offline
                     \n🤖  *'#TDOn'* Melihat Jumlah Tidak Diterima Online
                     \n🤖  *'#TDOff'* Melihat Jumlah Tidak Diterima Offline
+                    \n🤖  *'#DDOn'* Melihat Orderan Mendapat driver
+                    \n🤖  *'#DDOff'* Melihat Orderan Offline Mendapat Driver
                     `)
                     break
                 case '#Ldriver':
