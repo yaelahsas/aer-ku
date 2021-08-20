@@ -19,9 +19,15 @@ function start(client) {
         console.log("Starting");
         try {
             await nootif.subscribe("AER/Lapak");
+            await nootif.subscribe("AER/Lapak/testing");
+
             nootif.on('message', (topic, message) => {
-                    console.log(topic, message.toString())
-                    client.sendText('6281222354752-1617851635@g.us', message.toString())
+                    if (topic === "AER/Lapak") {
+                        client.sendText('6281222354752-1617851635@g.us', message.toString())
+                    } else if (topic === "AER/Lapak/testing") {
+
+                        client.sendText('6281217372153-1620548473@g.us', message.toString())
+                    }
                 })
                 // This line doesn't run until the server responds to the publish
 
@@ -34,7 +40,7 @@ function start(client) {
         }
     }
     client.onMessage(async message => {
-
+        // console.log(message)
         const { type, body, from, t, sender, isGroupMsg, chat, caption, isMedia, mimetype, quotedMsg } = message
         const { id, pushname } = sender
         const { name } = chat
