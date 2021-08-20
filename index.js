@@ -18,7 +18,7 @@ function start(client) {
 
         console.log("Starting");
         try {
-            await nootif.subscribe("AER/lapak");
+            await nootif.subscribe("AER/Lapak");
             nootif.on('message', (topic, message) => {
                     console.log(topic, message.toString())
                     client.sendText('6281222354752-1617851635@g.us', message.toString())
