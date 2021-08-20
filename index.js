@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const MQTT = require("async-mqtt");
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { orderan_tidak_dapat_driver, orderan_selesai } = require('./lib/aerapi')
+const { orderan_tidak_dapat_driver, orderan_selesai, orderan_dapat_driver } = require('./lib/aerapi')
 
 
 wa.create().then(client => start(client));
@@ -39,7 +39,7 @@ function start(client) {
         const { id, pushname } = sender
         const { name } = chat
         const time = moment(t * 1000).format('DD/MM HH:mm:ss')
-        const commands = ['#ig', '#TDOn', '#TDOff', '#SOn', '#SOff', '#cpns', '#topup', '#sticker', '#stiker', '#halo', '#help', '#Ldriver', '#Llapak', '#ceksaldo', '#Fdriver']
+        const commands = ['#DDOn', '#DDOff', '#ig', '#TDOn', '#TDOff', '#SOn', '#SOff', '#cpns', '#topup', '#sticker', '#stiker', '#halo', '#help', '#Ldriver', '#Llapak', '#ceksaldo', '#Fdriver']
         const cmds = commands.map(x => x + '\\b').join('|')
         const cmd = type === 'chat' ? body.match(new RegExp(cmds, 'gi')) : type === 'image' && caption ? caption.match(new RegExp(cmds, 'gi')) : ''
         if (cmd) {
@@ -315,7 +315,7 @@ function start(client) {
 
                     break
                 case '#SOff':
-                    getResult("https://aerumah.com/api/bot-total_orderan_selesai_offline")
+                    orderan_selesai("https://aerumah.com/api/bot-total_orderan_selesai_offline")
                         .then((result) => {
                             client.sendText(from, result)
                         })
@@ -326,7 +326,6 @@ function start(client) {
                     orderan_tidak_dapat_driver("https://aerumah.com/api/bot-lihat_orderan_tidak_dapat_driver")
                         .then((result) => {
                             client.sendText(from, result)
-
                         })
                     break
                 case '#TDOff':
@@ -335,7 +334,18 @@ function start(client) {
                             client.sendText(from, result)
                         })
                     break
-
+                case '#DDOn':
+                    orderan_dapat_driver("https://aerumah.com/api/bot-lihat_orderan_dapat_driver")
+                        .then((result) => {
+                            client.sendText(from, result)
+                        })
+                    break
+                case '#DDOff':
+                    orderan_dapat_driver("https://aerumah.com/api/bot-lihat_orderan_dapat_driver_offline")
+                        .then((result) => {
+                            client.sendText(from, result)
+                        })
+                    break
             }
         } else {
             if (!isGroupMsg) console.log('[RECV]', color(time, 'yellow'), 'Message from', color(pushname))
